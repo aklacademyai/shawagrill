@@ -17,8 +17,13 @@
   .logo{font-size:26px;font-weight:900;letter-spacing:3px;background:linear-gradient(90deg,#E63312,#FFC500 50%,#E63312);-webkit-background-clip:text;background-clip:text;color:transparent}
   .logo small{display:block;font-size:10px;letter-spacing:2.5px;color:var(--cream);font-weight:600;opacity:.9}
   .halal{background:var(--green);color:#fff;font-size:10px;font-weight:800;letter-spacing:1.5px;padding:4px 8px;border-radius:6px}
-  .tableno{font-size:13px;color:var(--cream);opacity:.95}
-  .tableno b{color:var(--gold2);font-size:15px}
+  .tableno{display:inline-flex;align-items:baseline;gap:6px;background:linear-gradient(95deg,#E63312,#F07D0A 55%,#FFC500);color:#211D12;padding:5px 12px 7px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+  .tableno b{color:#211D12;font-family:'Archivo Black',sans-serif;font-size:23px;line-height:1}
+  .tableno.mode b{font-size:14.5px;font-family:inherit;font-weight:800}
+  .tBanner{display:flex;align-items:center;gap:12px;margin:12px 16px 2px;background:var(--ink);border:2px solid var(--gold);border-radius:16px;padding:12px 16px;color:var(--cream)}
+  .tBanner .tbIco{font-size:30px;line-height:1}
+  .tBanner .tbLbl{font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;opacity:.85}
+  .tBanner .tbNum{font-family:'Archivo Black',sans-serif;font-size:36px;line-height:1;color:var(--gold2);margin-left:auto;white-space:nowrap}
   .langrow{display:flex;gap:6px;margin-top:10px;align-items:center}
   .langlbl{font-size:11px;letter-spacing:1.5px;color:var(--cream);opacity:.75;font-weight:700;margin-right:2px}
   .langbtn{border:1.5px solid rgba(246,231,193,.4);background:transparent;color:var(--cream);border-radius:8px;padding:5px 11px;font-size:12.5px;font-weight:800;cursor:pointer}
@@ -243,6 +248,47 @@
 .splitrow{display:flex;align-items:center;gap:10px;justify-content:space-between;background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px 13px}
 .clvstat{font-size:13px;line-height:1.5;padding:10px 12px;border-radius:10px;background:var(--card);border:1.5px solid var(--line);margin-top:9px;white-space:pre-wrap;word-break:break-word}
 
+/* ===== UI POLISH v2 — 2026-10-20: тёплая «огненная» тема, мягкие тени, крупные цели нажатия ===== */
+body{background:#C9AF74;background-image:radial-gradient(1100px 550px at 50% -8%,#EBD69C,#C9AF74)}
+#app{background:linear-gradient(180deg,#F9EECB 0,#F7E9C8 260px)}
+header{background:linear-gradient(180deg,#2B2517,#211D12);box-shadow:0 6px 18px rgba(33,29,18,.35);border-bottom:2px solid var(--gold)}
+.halal{border-radius:999px;padding:5px 10px;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.langbtn{border-radius:999px;padding:6px 13px}
+.langbtn.on{box-shadow:0 3px 8px rgba(240,125,10,.45)}
+.hbtn{border-radius:12px;padding:10px 6px;background:rgba(246,231,193,.06)}
+.hbtn.call.active{box-shadow:0 4px 10px rgba(240,125,10,.5)}
+.tBanner{background:linear-gradient(95deg,#E63312,#F07D0A 55%,#FFC500);border:none;box-shadow:0 10px 24px rgba(230,51,18,.35);padding:14px 18px;margin-top:14px}
+.tBanner .tbIco{background:rgba(33,29,18,.92);border-radius:50%;width:52px;height:52px;display:flex;align-items:center;justify-content:center;font-size:25px;flex-shrink:0}
+.tBanner .tbLbl{color:#211D12;opacity:.78}
+.tBanner .tbNum{color:#fff;font-size:42px;text-shadow:0 2px 12px rgba(0,0,0,.28)}
+.cat{box-shadow:0 2px 6px rgba(33,29,18,.06);padding:9px 15px}
+.cat.on{box-shadow:0 4px 10px rgba(33,29,18,.25)}
+.catTitle{font-size:19px;margin:20px 0 12px}
+.item{border-radius:18px;box-shadow:0 4px 14px rgba(33,29,18,.08);border-color:#EBD9A0}
+.addbtn{background:linear-gradient(135deg,#E63312,#F07D0A);color:#fff;border-radius:50%;width:42px;height:42px;box-shadow:0 4px 10px rgba(230,51,18,.4);font-size:24px}
+.tabbar{background:rgba(33,29,18,.97);box-shadow:0 -6px 18px rgba(33,29,18,.25)}
+.tabbar button{font-size:12.5px;padding:12px 4px 14px}
+.bigbtn{background:linear-gradient(95deg,#E63312,#F07D0A 55%,#FFC500);color:#fff;box-shadow:0 8px 20px rgba(230,51,18,.35);border-radius:16px}
+.bigbtn.dark{background:var(--ink);color:var(--gold2);box-shadow:0 6px 16px rgba(33,29,18,.3)}
+.ghostbtn{background:rgba(255,252,242,.65);border-radius:16px}
+.modecard{box-shadow:0 6px 16px rgba(33,29,18,.08);border-radius:18px}
+.tt{box-shadow:0 6px 14px rgba(33,29,18,.08)}
+.sheet{border-radius:26px 26px 0 0;box-shadow:0 -12px 32px rgba(0,0,0,.35)}
+.opt{border-radius:14px}
+.opt.sel{box-shadow:inset 0 0 0 1px var(--gold)}
+.tip{border-radius:13px}
+.tip.sel{box-shadow:inset 0 0 0 1px var(--gold)}
+.line,.totals,.stat,.tcard,.kbatch{box-shadow:0 3px 10px rgba(33,29,18,.06)}
+.searchin{border-radius:14px;box-shadow:0 2px 8px rgba(33,29,18,.05)}
+.fchip.on{box-shadow:0 3px 8px rgba(33,29,18,.2)}
+.upcard{border-radius:16px}
+.toast{border-radius:999px;box-shadow:0 10px 24px rgba(0,0,0,.35);bottom:96px}
+.txtin,.pininput{border-radius:12px}
+.qty button{border-radius:50%}
+@media (prefers-color-scheme: dark){
+  body{background:#131009;background-image:none}
+  #app{background:var(--bg)}
+}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;600;700;800;900&display=swap" rel="stylesheet"></head>
 <body>
@@ -272,6 +318,7 @@
   </div>
 
   <div id="viewGuest">
+    <div id="tableBanner" class="tBanner" style="display:none"><span class="tbIco">🪑</span><span class="tbLbl" id="tbLbl">Your table</span><span class="tbNum" id="tbNum"></span></div>
     <nav class="cats" id="cats"></nav>
     <main id="menuMain"></main>
     <main id="tabMain" style="display:none"></main>
@@ -491,6 +538,7 @@ es:{ table:'Mesa', callWaiter:'🔔 Llamar al mesero', waiterComing:'✅ El mese
 
 Object.assign(I18N.en, { searchPh:'Search the menu…', fAll:'All', fHit:'Hits', fHot:'Spicy', fVeg:'Veg', fNew:'New', tagNew:'NEW', dishDay:'Dish of the day −10%', allergens:'Allergens: ', pairsWith:'Pairs well with', goesWith:'Goes well with your order', addMore:'➕ Add more to the order', reorder:'🔁 Reorder all of this', etaLbl:'Ready in ≈ ', readyTitle:'✅ Your order is ready!', readySub:'It is on its way to your table — enjoy!', pickupTime:'Pickup time', asap:'As soon as possible', loyalTitle:'🎁 Loyalty card', loyalText:'Enter your phone number — a stamp for every order, and your 6th order includes a free item on us.', loyalSave:'Save', loyalGift:'🎁 This is your 6th order — a free item is already on this check!', loyalToGift:'more order(s) — then the 6th one brings a free item', loyalSaved:'Phone saved — stamps are counting 🎁', splitLbl:'Split the bill', splitPer:'per person', guestsLbl:'guests', customTip:'Custom tip %', fbTitle:'⭐ How was everything?', fbText:'Step 1 — tell us privately, we read every note:', fbPh:'What did you like? What should we fix?', fbSend:'Send feedback', fbThanks:'Thank you! Feedback sent to the manager.', fbStep2:'Step 2 — a public Google review helps us a lot:', promosMgr:'🎟 Promos & dish of the day', pcCode:'CODE', pcPct:'% off', pcAmt:'$ off', pcVal:'Value', pcOnce:'One-time', pcMulti:'Reusable', pcFrom:'From h', pcTo:'To h', pcCreate:'Create promo', pcCreated:'Promo created', pcDel:'Delete', dishDayLbl:'Dish of the day (−10%)', dishDayNone:'— none —', promoOkAmt:'Promo applied: −', anTitle:'📈 Owner analytics', anByHour:'Sales by hour', anBottom:'Least sold', anExport:'⬇ Export CSV (sales)', anExported:'CSV file exported', allDay:'All day · open now', cloverTab:'💳 Clover', clvTitle:'💳 Clover integration', clvEnv:'Environment', clvSandbox:'Sandbox', clvProd:'Production', clvMid:'Merchant ID', clvToken:'API token (entered by owner only)', clvTokenNote:'Stored only in this device local storage. Never paste it anywhere else.', clvSave:'Save settings', clvTest:'Test connection', clvSync:'Sync menu from Clover', clvEnabled:'Send orders to Clover', clvTestOrder:'Send test order', clvMap:'Menu mapping — our item → Clover item ID', clvModMap:'Add-ons — add-on → Clover modifier ID', clvOtTable:'Order type · dine-in', clvOtTogo:'Order type · to-go', clvOtDlv:'Order type · delivery', clvLog:'Clover log', clvOk:'Clover: sent · order ', clvErr:'Clover error: ', clvCors:'Network / CORS error — Clover API may block direct browser calls. The order is saved locally; check the connection or use backend mode later.', clvSaved:'Clover settings saved', clvNeed:'Enter Merchant ID and token first', clvConnected:'Connected ✓ Merchant OK · order types: ', clvItems:'Clover items: ', clvMapped:' · mapped: ', privacy:'Privacy Policy', terms:'Terms of Service' });
 Object.assign(I18N.ru, { searchPh:'Поиск по меню…', fAll:'Все', fHit:'Хиты', fHot:'Острое', fVeg:'Вег', fNew:'Новое', tagNew:'NEW', dishDay:'Блюдо дня −10%', allergens:'Аллергены: ', pairsWith:'К этому берут', goesWith:'К вашему заказу подойдёт', addMore:'➕ Дозаказать ещё', reorder:'🔁 Повторить всё это', etaLbl:'Будет готово ≈ через ', readyTitle:'✅ Ваш заказ готов!', readySub:'Уже несём к вашему столу — приятного аппетита!', pickupTime:'Заказ к времени', asap:'Как можно скорее', loyalTitle:'🎁 Карта лояльности', loyalText:'Укажите номер телефона — штамп за каждый заказ, а 6-й заказ включает бесплатную позицию от нас.', loyalSave:'Сохранить', loyalGift:'🎁 Это ваш 6-й заказ — бесплатная позиция уже в этом чеке!', loyalToGift:'заказ(а) — и 6-й принесёт бесплатную позицию', loyalSaved:'Телефон сохранён — штампы считаются 🎁', splitLbl:'Разделить счёт', splitPer:'с человека', guestsLbl:'гостей', customTip:'Свой % чаевых', fbTitle:'⭐ Как вам у нас?', fbText:'Шаг 1 — напишите нам лично, мы читаем всё:', fbPh:'Что понравилось? Что исправить?', fbSend:'Отправить отзыв', fbThanks:'Спасибо! Отзыв ушёл управляющему.', fbStep2:'Шаг 2 — публичный отзыв в Google нам очень поможет:', promosMgr:'🎟 Промокоды и блюдо дня', pcCode:'КОД', pcPct:'% скидка', pcAmt:'$ скидка', pcVal:'Значение', pcOnce:'Разовый', pcMulti:'Многоразовый', pcFrom:'С часа', pcTo:'До часа', pcCreate:'Создать промокод', pcCreated:'Промокод создан', pcDel:'Удалить', dishDayLbl:'Блюдо дня (−10%)', dishDayNone:'— нет —', promoOkAmt:'Промокод применён: −', anTitle:'📈 Аналитика владельца', anByHour:'Продажи по часам', anBottom:'Меньше всего продаётся', anExport:'⬇ Экспорт CSV (продажи)', anExported:'CSV-файл экспортирован', allDay:'All day · сейчас открыто', cloverTab:'💳 Clover', clvTitle:'💳 Интеграция Clover', clvEnv:'Окружение', clvSandbox:'Sandbox', clvProd:'Production', clvMid:'Merchant ID', clvToken:'API-токен (вводит только владелец)', clvTokenNote:'Хранится только в local storage этого устройства. Никуда больше не вставляйте.', clvSave:'Сохранить настройки', clvTest:'Проверить подключение', clvSync:'Синхронизировать меню', clvEnabled:'Отправлять заказы в Clover', clvTestOrder:'Тестовый заказ', clvMap:'Сопоставление меню — наша позиция → ID позиции Clover', clvModMap:'Добавки — добавка → ID модификатора Clover', clvOtTable:'Тип заказа · в зале', clvOtTogo:'Тип заказа · с собой', clvOtDlv:'Тип заказа · доставка', clvLog:'Журнал Clover', clvOk:'Clover: отправлено · заказ ', clvErr:'Ошибка Clover: ', clvCors:'Сетевая ошибка / CORS — Clover API может блокировать прямые вызовы из браузера. Заказ сохранён локально; проверьте подключение или используйте backend-режим.', clvSaved:'Настройки Clover сохранены', clvNeed:'Сначала введите Merchant ID и токен', clvConnected:'Подключено ✓ Мерчант OK · типов заказов: ', clvItems:'Позиций в Clover: ', clvMapped:' · сопоставлено: ', privacy:'Политика конфиденциальности', terms:'Условия использования' });
+Object.assign(I18N.en,{yourTable:'Your table'}); Object.assign(I18N.ru,{yourTable:'Ваш стол'}); Object.assign(I18N.es,{yourTable:'Tu mesa'});
 Object.assign(I18N.es, { searchPh:'Buscar en el menú…', fAll:'Todo', fHit:'Top', fHot:'Picante', fVeg:'Veg', fNew:'Nuevo', tagNew:'NUEVO', dishDay:'Plato del día −10%', allergens:'Alérgenos: ', pairsWith:'Combina bien con', goesWith:'Combina con tu pedido', addMore:'➕ Agregar más al pedido', reorder:'🔁 Repetir todo esto', etaLbl:'Listo en ≈ ', readyTitle:'✅ ¡Tu pedido está listo!', readySub:'Ya va camino a tu mesa — ¡buen provecho!', pickupTime:'Hora de recogida', asap:'Lo antes posible', loyalTitle:'🎁 Tarjeta de fidelidad', loyalText:'Ingresa tu teléfono: un sello por pedido y el 6.º pedido incluye un ítem gratis de la casa.', loyalSave:'Guardar', loyalGift:'🎁 Es tu 6.º pedido: ¡un ítem gratis ya está en esta cuenta!', loyalToGift:'pedido(s) más y el 6.º trae un ítem gratis', loyalSaved:'Teléfono guardado: los sellos cuentan 🎁', splitLbl:'Dividir la cuenta', splitPer:'por persona', guestsLbl:'personas', customTip:'Propina personalizada %', fbTitle:'⭐ ¿Qué tal todo?', fbText:'Paso 1: cuéntanos en privado, leemos todo:', fbPh:'¿Qué te gustó? ¿Qué debemos mejorar?', fbSend:'Enviar comentario', fbThanks:'¡Gracias! Comentario enviado al gerente.', fbStep2:'Paso 2: una reseña pública en Google nos ayuda mucho:', promosMgr:'🎟 Promociones y plato del día', pcCode:'CÓDIGO', pcPct:'% dto.', pcAmt:'$ dto.', pcVal:'Valor', pcOnce:'Un solo uso', pcMulti:'Reusable', pcFrom:'Desde h', pcTo:'Hasta h', pcCreate:'Crear código', pcCreated:'Código creado', pcDel:'Eliminar', dishDayLbl:'Plato del día (−10%)', dishDayNone:'— ninguno —', promoOkAmt:'Código aplicado: −', anTitle:'📈 Analítica del dueño', anByHour:'Ventas por hora', anBottom:'Menos vendidos', anExport:'⬇ Exportar CSV (ventas)', anExported:'CSV exportado', allDay:'All day · abiertos ahora', cloverTab:'💳 Clover', clvTitle:'💳 Integración Clover', clvEnv:'Entorno', clvSandbox:'Sandbox', clvProd:'Production', clvMid:'Merchant ID', clvToken:'Token API (solo el dueño)', clvTokenNote:'Se guarda solo en el almacenamiento local de este dispositivo. No lo pegues en ningún otro sitio.', clvSave:'Guardar ajustes', clvTest:'Probar conexión', clvSync:'Sincronizar menú', clvEnabled:'Enviar pedidos a Clover', clvTestOrder:'Pedido de prueba', clvMap:'Mapa del menú: nuestro ítem → ID de Clover', clvModMap:'Extras: extra → ID de modificador Clover', clvOtTable:'Tipo de pedido · en mesa', clvOtTogo:'Tipo de pedido · para llevar', clvOtDlv:'Tipo de pedido · delivery', clvLog:'Registro Clover', clvOk:'Clover: enviado · pedido ', clvErr:'Error Clover: ', clvCors:'Error de red / CORS: la API de Clover puede bloquear llamadas directas del navegador. El pedido quedó guardado localmente.', clvSaved:'Ajustes de Clover guardados', clvNeed:'Primero ingresa Merchant ID y token', clvConnected:'Conectado ✓ Merchant OK · tipos de pedido: ', clvItems:'Ítems en Clover: ', clvMapped:' · mapeados: ', privacy:'Política de privacidad', terms:'Términos del servicio' });
 
 const T = k => (I18N[lang] && I18N[lang][k]) || I18N.en[k] || k;
@@ -651,6 +699,7 @@ function applyStaticTexts(){
   document.querySelectorAll('.langbtn').forEach(b=>b.classList.toggle('on', b.dataset.lang===lang));
   renderCallBtn();
   if(typeof updateRoleBtn==='function') updateRoleBtn();
+  if(typeof updateModeLabel==='function') updateModeLabel();
 }
 document.querySelectorAll('.langbtn').forEach(b=>b.onclick=()=>{
   lang = b.dataset.lang; LS.setItem('shawa_lang', lang);
@@ -1900,9 +1949,10 @@ function tLabel(tid){
   return T('table') + ' ' + tid;
 }
 function updateModeLabel(){
-  if(!tableId){ $('#hTable').textContent = '—'; $('#hTableLbl').textContent = T('table'); return; }
-  if(tableId === 'togo' || tableId === 'dlv'){ $('#hTable').textContent = tLabel(tableId); $('#hTableLbl').textContent = ''; }
-  else { $('#hTable').textContent = tableId; $('#hTableLbl').textContent = T('table'); }
+  const bn = $('#tableBanner'), tn = document.querySelector('.tableno');
+  if(!tableId){ $('#hTable').textContent = '—'; $('#hTableLbl').textContent = T('table'); if(tn) tn.classList.remove('mode'); if(bn) bn.style.display = 'none'; return; }
+  if(tableId === 'togo' || tableId === 'dlv'){ $('#hTable').textContent = tLabel(tableId); $('#hTableLbl').textContent = ''; if(tn) tn.classList.add('mode'); if(bn) bn.style.display = 'none'; }
+  else { $('#hTable').textContent = tableId; $('#hTableLbl').textContent = T('table'); if(tn) tn.classList.remove('mode'); if(bn){ bn.style.display = 'flex'; $('#tbLbl').textContent = T('yourTable'); $('#tbNum').textContent = '№ ' + tableId; } }
 }
 function showStart(step){
   startStep = step || 'main';
