@@ -289,6 +289,62 @@ header{background:linear-gradient(180deg,#2B2517,#211D12);box-shadow:0 6px 18px 
   body{background:#131009;background-image:none}
   #app{background:var(--bg)}
 }
+
+/* ===== UI LIGHT v3 — 2026-10-20: светлая тема по образцу smashbros.co — белый фон, чёрный текст, один огненный акцент ===== */
+:root{color-scheme:light;--bg:#FAF8F2;--card:#FFFFFF;--ink:#1C1A15;--muted:#7A7263;--line:#E9E2D2}
+body{background:#EFEAE0;background-image:none;color:var(--ink)}
+#app{background:#FAF8F2;box-shadow:0 0 44px rgba(28,26,21,.14)}
+header{background:#FFFFFF;border-bottom:1px solid var(--line);box-shadow:0 2px 14px rgba(28,26,21,.06);color:var(--ink)}
+.halal{box-shadow:none}
+.langlbl{color:var(--muted)}
+.langbtn{border-color:#DCD2BC;color:var(--ink)}
+.langbtn.on{background:var(--ink);border-color:var(--ink);color:#FFC500;box-shadow:0 3px 8px rgba(28,26,21,.25)}
+.hbtn{border-color:#DCD2BC;color:var(--ink);background:#FBF9F3}
+.hbtn.call{border-color:#E63312;color:#E63312}
+.hbtn.call.active{background:#E63312;color:#fff;border-color:#E63312;box-shadow:0 4px 10px rgba(230,51,18,.35)}
+.tableno{box-shadow:0 4px 12px rgba(230,51,18,.35)}
+.cat{background:#fff}
+.cat.on{background:#E63312;border-color:#E63312;color:#fff;box-shadow:0 4px 10px rgba(230,51,18,.3)}
+.item{background:#fff;border-color:#EDE5D0;box-shadow:0 3px 12px rgba(28,26,21,.06)}
+.item .price span{color:#E63312}
+.addbtn{background:#E63312;box-shadow:0 4px 10px rgba(230,51,18,.35)}
+.tabbar{background:rgba(255,255,255,.97);border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(28,26,21,.07)}
+.tabbar button{color:#8A8172;opacity:1}
+.tabbar button.on{color:#E63312}
+.bigbtn{background:#E63312;color:#fff;box-shadow:0 8px 20px rgba(230,51,18,.3)}
+.bigbtn.dark{background:var(--ink);color:#FFC500}
+.ghostbtn{background:#fff;border-color:#DCD2BC}
+.modecard{background:#fff;border-color:#EDE5D0}
+.tt{background:#fff}
+.sheet{background:#FAF8F2}
+.opt{background:#fff}
+.opt.sel{background:#FFF3E4;border-color:#F07D0A;box-shadow:inset 0 0 0 1px #F07D0A}
+.tip{background:#fff}
+.tip.sel{background:#FFF3E4;border-color:#F07D0A;box-shadow:inset 0 0 0 1px #F07D0A}
+.line,.totals,.stat,.tcard{background:#fff}
+.searchin{background:#fff}
+.fchip{background:#fff}
+.fchip.on{background:#E63312;border-color:#E63312;color:#fff}
+.upcard{background:#fff}
+.upcard button{background:#E63312;color:#fff}
+.toast{background:var(--ink);color:#fff}
+.txtin,.pininput{background:#fff}
+.qty button{background:#fff}
+.kcall{background:#FFF3E4}
+.receipt{background:#fff}
+.stamp{background:#fff}
+.stamp.on{background:#FFF3E4}
+@media (prefers-color-scheme: dark){
+  :root{--bg:#FAF8F2;--card:#FFFFFF;--ink:#1C1A15;--muted:#7A7263;--line:#E9E2D2}
+  body{background:#EFEAE0;background-image:none}
+  #app{background:#FAF8F2;box-shadow:0 0 44px rgba(28,26,21,.14)}
+  .opt.sel,.tip.sel{background:#FFF3E4}
+  .kcall{background:#FFF3E4}
+  .st-served{background:#E4D6A8;color:#6E5F33}
+  .totals .tr{color:#4c4230}
+  .barrow .bt{background:#EFE3C2}
+  .qty button{background:#fff;color:var(--ink)}
+}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Manrope:wght@400;600;700;800;900&display=swap" rel="stylesheet"></head>
 <body>
