@@ -179,9 +179,9 @@
   .logo .lgflame img{height:27px;width:auto;vertical-align:-5px}
   /* SIGN LOCKUP v4 — вариант с вывески: пламя сверху, SHAWA / GRILL стопкой, оранжевая черта */
   .logo-stack{display:inline-flex;flex-direction:column;align-items:stretch;line-height:1}
-  .logo-stack .ls-flame{height:23px;width:auto;align-self:center;margin-bottom:4px}
-  .logo-stack .ls-words{display:flex;flex-direction:column;font-size:21px;letter-spacing:2.5px;color:var(--ink);line-height:1.05}
-  .logo-stack .ls-line{height:4px;border-radius:2px;background:linear-gradient(90deg,#E63312,#F07D0A 60%,#FFC500);margin-top:5px}
+  .logo-stack .ls-flame{height:31px;width:auto;align-self:center;margin-bottom:5px}
+  .logo-stack .ls-words{display:flex;flex-direction:column;font-size:27px;letter-spacing:3px;color:var(--ink);line-height:1.05}
+  .logo-stack .ls-line{height:5px;border-radius:2px;background:linear-gradient(90deg,#E63312,#F07D0A 60%,#FFC500);margin-top:6px}
   .startbrand{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px}
   .startbrand .startlogo{font-size:min(52px,11vw);margin-top:0}
   .startflame{height:min(56px,12vw);width:auto}
@@ -375,7 +375,7 @@ header{background:#FFFFFF;border-bottom:1px solid var(--line);box-shadow:0 2px 1
   </header>
 
   <div id="viewStart" style="display:none">
-    <main id="startMain" style="padding-top:20px"></main>
+    <main id="startMain" style="padding-top:56px"></main>
   </div>
 
   <div id="viewGuest">
@@ -409,6 +409,10 @@ header{background:#FFFFFF;border-bottom:1px solid var(--line);box-shadow:0 2px 1
 
 <div class="overlay" id="legalOverlay">
   <div class="sheet" id="legalSheet"></div>
+</div>
+
+<div class="overlay" id="promoOverlay">
+  <div class="sheet" id="promoSheet"></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -1091,7 +1095,7 @@ function renderPay(){
   if(bp) bp.onclick = ()=>{
     const code = ($('#promoInp').value||'').trim().toUpperCase();
     const s = loadStore(); const tb = s.tables[tableId]; if(!tb) return;
-    const p = (s.promos||[]).find(x=>x.code===code && x.kind==='custom' && (x.uses==='multi' || !x.used) && happyOk(x));
+    const p = (s.promos||[]).find(x=>x.code===code && (x.kind==='custom' || x.kind==='review') && (x.uses==='multi' || !x.used) && happyOk(x));
     if(!p){ toast(T('promoBad')); return; }
     const tt = tabTotals(tb); const amt = p.ptype==='pct' ? Math.round(tt.sub*p.value)/100 : p.value;
     if(p.uses==='once') p.used = true;
@@ -1150,6 +1154,45 @@ function renderThanks(t, tab){
   };
 }
 $('#payOverlay').addEventListener('click', e=>{ if(e.target.id==='payOverlay') closePay(); });
+
+/* ===== Акция «$5 за отзыв» (возвращена владельцем 2026-10-21) ===== */
+function closePromo(){ $('#promoOverlay').classList.remove('open'); }
+function openPromoSheet(){ renderPromoSheet(null); $('#promoOverlay').classList.add('open'); }
+function issueReviewPromo(text){
+  const s = loadStore(); s.promos = s.promos || []; s.reviews = s.reviews || [];
+  let code; do { code = 'REVIEW-' + Math.random().toString(36).slice(2,6).toUpperCase(); } while(s.promos.some(p=>p.code===code));
+  s.promos.push({code, kind:'review', ptype:'amt', value:5, uses:'once', used:false, at:Date.now()});
+  s.reviews.push({table:tableId||'start', stars:5, text, via:'promo', at:Date.now()});
+  saveStore(s); return code;
+}
+function renderPromoSheet(code){
+  const sh = $('#promoSheet');
+  if(code){
+    sh.innerHTML = `<div style="text-align:center">
+      <div style="font-size:40px">🎁</div>
+      <h2 style="font-size:20px;font-weight:900;margin-top:6px">${T('promoTitle')}</h2>
+      <p style="color:var(--muted);font-size:14px;margin-top:10px;line-height:1.5">${T('promoGot')}</p>
+      <div style="font-family:'Archivo Black','Manrope',sans-serif;font-size:25px;letter-spacing:2px;margin:14px 0;padding:14px;border:2px dashed var(--terra,#C05A2E);border-radius:14px">${code}</div>
+      <button class="bigbtn dark" id="promoDone">OK</button></div>`;
+    $('#promoDone').onclick = closePromo; return;
+  }
+  sh.innerHTML = `
+    <div style="text-align:center"><div style="font-size:26px;letter-spacing:6px;color:#F07D0A">★★★★★</div>
+    <h2 style="font-size:21px;font-weight:900;margin-top:6px">${T('promoTitle')}</h2>
+    <p style="color:var(--muted);font-size:14px;margin-top:8px;line-height:1.55">${T('promoText')}</p></div>
+    <button class="bigbtn" id="btnPromoGoogle" style="margin-top:14px">${T('promoOpenG')}</button>
+    <textarea class="txtin" id="promoRevText" rows="4" placeholder="${T('promoPh')}" style="width:100%;margin-top:12px;resize:vertical"></textarea>
+    <button class="bigbtn dark" id="btnPromoClaim" style="margin-top:12px">${T('promoClaim')}</button>
+    <button class="ghostbtn" id="promoClose" style="margin-top:10px">${T('cancel')}</button>`;
+  $('#btnPromoGoogle').onclick = ()=>window.open(getReviewUrl(), '_blank');
+  $('#promoClose').onclick = closePromo;
+  $('#btnPromoClaim').onclick = ()=>{
+    const text = ($('#promoRevText').value||'').trim();
+    if(!text){ toast(T('promoNeed')); return; }
+    renderPromoSheet(issueReviewPromo(text));
+  };
+}
+$('#promoOverlay').addEventListener('click', e=>{ if(e.target.id==='promoOverlay') closePromo(); });
 
 /* ===================== НАВИГАЦИЯ ГОСТЯ ===================== */
 function setGuestView(v){
@@ -1996,11 +2039,13 @@ function renderStart(){
       <button class="ordernow" id="stOrder">${T('orderNow')}</button>
       ${tableId ? `<button class="ghostbtn" id="stContinue" style="margin-top:12px">${T('continueAs')}: ${tLabel(tableId)}</button>` : ''}
       <button class="ghostbtn" id="stStaff" style="margin-top:10px">${T('staffSignIn')}</button>
+      <button class="promobanner" id="stPromo"><span class="pstars">★★★★★</span><div class="ptitle">${T('promoTitle')}</div><div class="ptext">${T('promoText')}</div></button>
       <div class="legalrow"><a data-legal="privacy">${T('privacy')}</a> · <a data-legal="terms">${T('terms')}</a></div>
       <div style="margin-top:16px;font-size:12.5px;color:var(--muted)">${T('startHint')}</div>`;
     $('#stOrder').onclick = ()=>showStart('mode');
     const c = $('#stContinue'); if(c) c.onclick = ()=>enterGuestSession();
     $('#stStaff').onclick = ()=>openRoleSheet();
+    $('#stPromo').onclick = ()=>openPromoSheet();
   }
   if(startStep === 'mode'){
     m.innerHTML = `
