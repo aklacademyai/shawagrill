@@ -1,0 +1,28 @@
+name = "shawa-ceo"
+main = "src/worker.js"
+workers_dev = true
+routes = [
+  { pattern = "shawa.work", custom_domain = true },
+  { pattern = "www.shawa.work", custom_domain = true }
+]
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "shawa-ceo-production"
+database_id = "2a60525f-09ce-43be-87a4-5c52e1cadcb7"
+migrations_dir = "migrations"
+
+[vars]
+APP_TIME_ZONE = "America/New_York"
+MAIL_FROM = "SHAWA CEO <noreply@shawa.work>"
+CLOVER_API_BASE = "https://api.clover.com"
+
+[triggers]
+crons = ["*/15 * * * *"]

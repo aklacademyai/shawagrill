@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#FF6B00">
+  <meta name="description" content="SHAWA CEO — выручка, заказы, кухня и склад, команда.">
+  <title>SHAWA CEO</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/icon-192.png">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" data-nav="home">SHAWA <span class="brand-team">CEO</span></a>
+      <div class="company-name" id="companyName">SHAWA GRILL &amp; MANGAL</div>
+      <div class="top-actions">
+        <button class="lang-toggle" id="langToggle" type="button">EN</button>
+        <button class="install-button" id="installButton" type="button">📲</button>
+        <div class="profile-chip hidden" id="profileChip"></div>
+        <button class="ghost-button hidden" id="logoutButton" type="button">Выйти</button>
+      </div>
+    </header>
+
+    <aside id="sideNav" class="side-nav hidden" aria-label="SHAWA CEO sections"></aside>
+
+    <main id="mainContent" class="main-content">
+      <section id="authView" class="auth-card">
+        <p class="eyebrow" data-i18n="authEyebrow">Выручка · заказы · кухня · команда</p>
+        <h1 data-i18n="authTitle">Вход в SHAWA CEO</h1>
+        <p class="muted" data-i18n="authHint">Первый профиль становится владельцем. Дальше — только по приглашениям руководителя.</p>
+        <div class="segmented" role="tablist">
+          <button type="button" id="showLogin" class="active" data-i18n="login">Вход</button>
+          <button type="button" id="showRegister" data-i18n="register">Регистрация</button>
+        </div>
+
+        <form id="loginForm" class="stack">
+          <label><span data-i18n="contact">Телефон или email</span><input name="contact" autocomplete="username" required placeholder="+1 954 000 0000 или name@mail.com"></label>
+          <label><span data-i18n="password">Пароль</span><input name="password" type="password" autocomplete="current-password"></label>
+          <button class="primary" type="submit" data-i18n="loginBtn">Войти</button>
+          <button class="secondary" type="button" id="forgotLink">Забыли пароль?</button>
+        </form>
+
+        <form id="resetStep1Form" class="stack hidden">
+          <p class="hint">Сбросим пароль по коду: введите телефон или email из вашего профиля — пришлём 6-значный код (письмом или SMS).</p>
+          <label><span>Телефон или email</span><input name="contact" autocomplete="username" required placeholder="+1 954 000 0000 или name@mail.com"></label>
+          <button class="primary" type="submit">Получить код</button>
+          <button class="secondary" type="button" id="resetBack1">← Ко входу</button>
+        </form>
+
+        <form id="resetStep2Form" class="stack hidden">
+          <p class="hint" id="resetCodeHint"></p>
+          <label><span>Код из письма или SMS</span><input name="code" inputmode="numeric" autocomplete="one-time-code" required maxlength="6"></label>
+          <label><span>Новый пароль</span><input name="password" type="password" autocomplete="new-password" required minlength="6"></label>
+          <button class="primary" type="submit">Сменить пароль и войти</button>
+          <button class="secondary" type="button" id="resetBack2">← Ко входу</button>
+        </form>
+
+        <form id="regStep1Form" class="stack hidden">
+          <div class="grid two">
+            <label><span data-i18n="firstName">Имя</span><input name="firstName" autocomplete="given-name" required></label>
+            <label><span data-i18n="lastName">Фамилия</span><input name="lastName" autocomplete="family-name" required></label>
+          </div>
+          <label><span data-i18n="contact">Телефон или email</span><input name="contact" autocomplete="email" required></label>
+          <label><span data-i18n="inviteCode">Код приглашения от руководителя</span><input name="inviteCode"></label>
+          <button class="primary" type="submit" data-i18n="next">Далее</button>
+          <p class="hint" data-i18n="regHint">Код приглашения выдаёт ваш руководитель — по нему подставятся должность, точка и роль.</p>
+        </form>
+
+        <form id="regCodeForm" class="stack hidden">
+          <p class="hint" id="regCodeHint"></p>
+          <label><span data-i18n="codeFromEmail">Код из письма</span><input name="code" inputmode="numeric" autocomplete="one-time-code" required maxlength="6"></label>
+          <button class="primary" type="submit" data-i18n="confirm">Подтвердить</button>
+          <button class="secondary" type="button" id="regResend" data-i18n="resend">Отправить код ещё раз</button>
+          <button class="secondary" type="button" id="regCodeBack">←</button>
+        </form>
+
+        <form id="regStep2Form" class="stack hidden">
+          <label><span data-i18n="newPassword">Придумайте пароль</span><input name="password" type="password" autocomplete="new-password" required minlength="6"></label>
+          <button class="primary" type="submit" data-i18n="createProfile">Создать профиль</button>
+          <button class="secondary" type="button" id="regBack">←</button>
+        </form>
+        <div id="authError" class="alert hidden" role="alert"></div>
+      </section>
+
+      <section id="appView" class="hidden">
+        <div id="pageContent"></div>
+      </section>
+    </main>
+
+    <nav id="bottomNav" class="bottom-nav hidden" aria-label="SHAWA CEO sections"></nav>
+  </div>
+
+  <div id="toast" class="toast hidden" role="status"></div>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

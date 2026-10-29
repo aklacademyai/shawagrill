@@ -1,0 +1,5 @@
+node_modules/
+.wrangler/
+backups/
+data/
+hidden_files/
