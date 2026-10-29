@@ -1,0 +1,29 @@
+name = "myteam"
+main = "src/worker.js"
+workers_dev = false
+routes = [
+  { pattern = "shawa.team", custom_domain = true },
+  { pattern = "www.shawa.team", custom_domain = true }
+]
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "myteam-production"
+database_id = "5395eea4-ab5c-470a-aeef-ef96e6718103"
+migrations_dir = "migrations"
+
+[triggers]
+# Cloudflare cron runs in UTC. The */15 job checks America/New_York itself;
+# the two Monday triggers cover 07:13 New York in daylight and standard time.
+crons = ["*/15 * * * *", "13 11 * * 1", "13 12 * * 1"]
+
+[vars]
+APP_TIME_ZONE = "America/New_York"
+MAIL_FROM = "MyTeam <noreply@shawa.team>"

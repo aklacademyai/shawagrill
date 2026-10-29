@@ -1,0 +1,8 @@
+.local/
+.wrangler/
+node_modules/
+data/*.sqlite
+data/*.sqlite-*
+
+backups/
+data/

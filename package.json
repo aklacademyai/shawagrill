@@ -1,0 +1,16 @@
+{
+  "name": "myteam-production",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node tools/local-server.mjs --seed ../goals/shawa-ceo/hidden_files/myteam-backup-2026-10-22-1251utc.json",
+    "dev:clean": "node tools/local-server.mjs",
+    "seed:local": "node tools/import-snapshot.mjs",
+    "seed:sql": "node tools/import-snapshot.mjs --sql-out data/import.sql",
+    "test": "node tests/run-tests.mjs",
+    "check": "node --check src/api.js && node --check src/worker.js && node --check public/app.js && node --check tools/local-server.mjs && node --check tools/import-snapshot.mjs"
+  },
+  "engines": { "node": ">=22.5" },
+  "devDependencies": { "wrangler": "^4.0.0" }
+}
