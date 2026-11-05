@@ -1092,6 +1092,14 @@ function renderPay(){
       <div class="opt ${payMethod==='card'?'sel':''}" data-pm="card">${T('card')}</div>
     </div>
     ${payMethod==='card'?`<div style="font-size:12.5px;color:var(--muted);margin-top:9px;line-height:1.5">${T('cardNote')}</div>`:''}
+    ${onlinePay ? `<div style="margin-top:12px">
+      <div class="opttl">Receipt details — entered once, Clover asks for them</div>
+      <div style="display:flex;gap:8px">
+        <input class="txtin" id="guestFn" placeholder="First name" autocomplete="given-name" value="${(guestInfo().firstName||'').replace(/"/g,'&quot;')}" style="flex:1">
+        <input class="txtin" id="guestLn" placeholder="Last name" autocomplete="family-name" value="${(guestInfo().lastName||'').replace(/"/g,'&quot;')}" style="flex:1">
+      </div>
+      <input class="txtin" id="guestEm" type="email" placeholder="Email for the receipt" autocomplete="email" value="${(guestInfo().email||'').replace(/"/g,'&quot;')}" style="margin-top:8px;width:100%">
+    </div>` : ''}
     <button class="bigbtn" id="btnDoPay">${T('pay')}${money(onlinePay ? t.total : grand)}</button>
     <button class="ghostbtn" id="btnPayCancel">${T('backToTab')}</button>`;
   document.querySelectorAll('[data-tip]').forEach(el=>el.onclick=()=>{ tipPct=parseFloat(el.dataset.tip); tipCustom=null; renderPay(); });
@@ -1971,6 +1979,13 @@ function webItemsFromLines(lines){
   });
   return items;
 }
+function guestInfo(){ try{ return JSON.parse(localStorage.getItem('shawa_guest_info') || '{}'); }catch(e){ return {}; } }
+function saveGuestInfo(){
+  const v = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+  const info = { firstName: v('guestFn') || guestInfo().firstName || '', lastName: v('guestLn') || guestInfo().lastName || '', email: v('guestEm') || guestInfo().email || '' };
+  try{ localStorage.setItem('shawa_guest_info', JSON.stringify(info)); }catch(e){}
+  return info;
+}
 async function doPayOnline(btn){
   const {tab} = getTab(false); if(!tab) return;
   const items = webItemsFromLines(tab.items);
@@ -1978,7 +1993,7 @@ async function doPayOnline(btn){
   const orig = btn.innerHTML;
   btn.disabled = true; btn.innerHTML = '<span class="spin"></span>' + T('processing');
   try{
-    const r = await fetch(SHAWA_PAY_API, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ table: Math.round(Number(tableId)), items }) });
+    const r = await fetch(SHAWA_PAY_API, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ table: Math.round(Number(tableId)), items, customer: saveGuestInfo() }) });
     const j = await r.json().catch(()=>({}));
     if(r.ok && j.ok && j.href){ try{ sessionStorage.setItem('shawa_pay_session', j.sessionId); }catch(e){} location.href = j.href; return; }
     throw new Error('HTTP ' + r.status);
