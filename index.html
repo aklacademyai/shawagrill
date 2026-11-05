@@ -197,6 +197,8 @@
   .signimg{width:min(450px,94vw);border-radius:16px;box-shadow:0 10px 30px rgba(33,29,18,.35)}
   .item .ph{width:88px;height:88px;border-radius:13px;overflow:hidden;flex-shrink:0;position:relative;cursor:pointer;background:linear-gradient(135deg,#E63312,#F07D0A 55%,#FFC500)}
   .item .ph img{width:100%;height:100%;object-fit:cover;display:block}
+  .item .ph video{width:100%;height:100%;object-fit:cover;display:block}
+  .sheetph video{width:100%;height:100%;object-fit:cover;display:block}
   .phflame{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font-size:32px}
   .noimg .phflame{display:flex}
   .sheetph{margin:-20px -18px 14px;height:215px;overflow:hidden;position:relative;background:linear-gradient(120deg,#E63312,#F07D0A 55%,#FFC500)}
@@ -783,11 +785,13 @@ function renderCats(){
 }
 function itemById(id){ for(const c of effMenu()) for(const it of c.items) if(it.id===id) return it; return null; }
 let LIVE_MENU = null;
+const VIDMAP = [['smash','assets/food-vid/smash-wrap.mp4'],['lamb chops','assets/food-vid/lamb-chops.mp4'],['chicken shawarma','assets/food-vid/chicken-shawarma.mp4'],['lamb shawarma','assets/food-vid/lamb-shawarma.mp4'],['chicken kebab','assets/food-vid/chicken-kebab.mp4'],['french fries','assets/food-vid/fries.mp4'],['fries','assets/food-vid/fries.mp4']];
+function vidFor(name){ const k = (name || '').toLowerCase(); for(const pair of VIDMAP){ if(k.includes(pair[0])) return pair[1]; } return ''; }
 function effMenu(){
   const s = loadStore();
   const hidden = new Set(s.hiddenItems||[]);
   const ov = s.nameOverrides||{};
-  const cats = (LIVE_MENU || MENU).map(c=>({cat:c.cat, items:c.items.filter(it=>!hidden.has(it.id)).map(it=>ov[it.id]?{...it, name:{...it.name, ...ov[it.id]}}:it)}));
+  const cats = (LIVE_MENU || MENU).map(c=>({cat:c.cat, items:c.items.filter(it=>!hidden.has(it.id)).map(it=>{ const b = ov[it.id]?{...it, name:{...it.name, ...ov[it.id]}}:{...it}; if(!b.vid) b.vid = vidFor(b.name && b.name.en); return b; })}));
   (s.customItems||[]).forEach(ci=>{ if(cats[ci.cat]) cats[ci.cat].items.push(ci); });
   return cats;
 }
@@ -816,7 +820,7 @@ function renderMenuList(){
   };
   const itemHtml = it => `
     <div class="item">
-      <div class="ph ${it.img?'':'noimg'}" data-open="${it.id}">${it.img?`<img src="${it.img}" alt="${L(it.name)}" loading="lazy" onerror="this.parentNode.classList.add('noimg');this.remove()">`:''}<span class="phflame">🔥</span></div>
+      <div class="ph ${(it.img||it.vid)?'':'noimg'}" data-open="${it.id}">${it.vid?`<video src="${it.vid}" ${it.img?`poster="${it.img}"`:''} muted loop autoplay playsinline preload="metadata"></video>`:it.img?`<img src="${it.img}" alt="${L(it.name)}" loading="lazy" onerror="this.parentNode.classList.add('noimg');this.remove()">`:''}<span class="phflame">🔥</span></div>
       <div class="info">
         <h3>${L(it.name)}${badgesHtml(it, dd)}</h3>
         <p>${L(it.desc)}</p>
@@ -855,7 +859,7 @@ function sheetUnitPrice(){
 }
 function renderSheet(){
   const it = sheetItem;
-  let html = `${it.img?`<div class="sheetph"><img src="${it.img}" alt="${L(it.name)}" onerror="this.parentNode.classList.add('noimg');this.remove()"><span class="phflame">🔥</span></div>`:''}<h2>${L(it.name)}</h2><div class="desc">${L(it.desc)}</div>
+  let html = `${it.vid?`<div class="sheetph"><video src="${it.vid}" ${it.img?`poster="${it.img}"`:''} muted loop autoplay playsinline></video></div>`:it.img?`<div class="sheetph"><img src="${it.img}" alt="${L(it.name)}" onerror="this.parentNode.classList.add('noimg');this.remove()"><span class="phflame">🔥</span></div>`:''}<h2>${L(it.name)}</h2><div class="desc">${L(it.desc)}</div>
     <div class="opttl">${T('price')}</div><div style="font-size:17px;font-weight:900">${money(priceOf(it))}</div>`;
   if(it.wrap){
     html += `<div class="opttl">${T('size')}</div>
