@@ -1935,7 +1935,33 @@ async function cloverReq(method, path, body){
   if(!r.ok){ let t = ''; try{ t = await r.text(); }catch(e){} throw new Error('HTTP ' + r.status + (t ? ' · ' + t.slice(0,160) : '')); }
   try{ return await r.json(); }catch(e){ return {}; }
 }
+const SHAWA_ORDER_API = 'https://shawa.work/api/public/order';
+async function backendPushOrder(lines, batchNo){
+  const table = Math.round(Number(tableId));
+  if(!(table >= 1 && table <= 15)) return false;
+  const items = [];
+  lines.forEach(l=>{
+    const nm = (l.names && (l.names.en || Object.values(l.names)[0])) || 'Item';
+    let suffix = '';
+    (l.mods || []).forEach(m=>{
+      if(m.t === 'size' && m.v === 1) suffix += ' (Large)';
+      else if(m.t === 'spice' && m.v > 0) suffix += ' \u00b7 spice ' + m.v;
+      else if(m.t === 'extra'){ const ex = WRAP_EXTRAS.find(w=>w.id===m.v); if(ex) suffix += ' + ' + ex.name.en; }
+      else if(m.t === 'no'){ const rm = WRAP_REMOVE.find(w=>w.id===m.v); if(rm) suffix += ' \u00b7 ' + rm.name.en; }
+    });
+    items.push({ name: (nm + suffix).slice(0, 120), priceCents: Math.round((l.unit || 0) * 100), qty: Math.max(1, Math.min(10, l.qty || 1)) });
+  });
+  if(!items.length) return false;
+  try{
+    const r = await fetch(SHAWA_ORDER_API, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ table, items, batch: batchNo }) });
+    const j = await r.json().catch(()=>({}));
+    if(r.ok && j.ok){ cloverLogPush('\u2713 web order ' + (j.orderId || '') + ' \u00b7 Table ' + table); toast(T('clvOk') + (j.orderId || '')); return true; }
+    cloverLogPush('\u2717 web order HTTP ' + r.status);
+    return false;
+  }catch(e){ cloverLogPush('\u2717 web order network'); return false; }
+}
 async function cloverPushOrder(lines, batchNo){
+  if(await backendPushOrder(lines, batchNo)) return;
   const c = getClover(); if(!c.enabled || !c.mid || !c.token) return;
   try{
     const mode = tableId==='togo' ? 'togo' : tableId==='dlv' ? 'dlv' : 'table';
