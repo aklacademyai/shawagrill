@@ -1066,6 +1066,7 @@ function renderPay(){
   const disc = Math.min(tab.discount||0, t.total);
   const gift = giftAmount(tab);
   const grand = t.total + tip - disc - gift;
+  const onlinePay = (Math.round(Number(tableId)) >= 1 && Math.round(Number(tableId)) <= 15 && !disc && !gift);
   $('#paySheet').innerHTML = `
     <h2>${T('payTitle').split('·')[0]}· ${tLabel(tableId)}</h2>
     <div class="totals" style="margin-top:14px">
@@ -1090,7 +1091,7 @@ function renderPay(){
       <div class="opt ${payMethod==='card'?'sel':''}" data-pm="card">${T('card')}</div>
     </div>
     ${payMethod==='card'?`<div style="font-size:12.5px;color:var(--muted);margin-top:9px;line-height:1.5">${T('cardNote')}</div>`:''}
-    <button class="bigbtn" id="btnDoPay">${T('pay')}${money(grand)}</button>
+    <button class="bigbtn" id="btnDoPay">${T('pay')}${money(onlinePay ? t.total : grand)}</button>
     <button class="ghostbtn" id="btnPayCancel">${T('backToTab')}</button>`;
   document.querySelectorAll('[data-tip]').forEach(el=>el.onclick=()=>{ tipPct=parseFloat(el.dataset.tip); tipCustom=null; renderPay(); });
   document.querySelectorAll('[data-pm]').forEach(el=>el.onclick=()=>{ payMethod=el.dataset.pm; renderPay(); });
@@ -1110,7 +1111,7 @@ function renderPay(){
     toast(T('promoOkAmt') + money(amt)); renderPay(); if(guestView==='tab') renderTab();
   };
   $('#btnPayCancel').onclick = closePay;
-  $('#btnDoPay').onclick = doPay;
+  $('#btnDoPay').onclick = ()=>{ if(onlinePay){ doPayOnline($('#btnDoPay')); return; } doPay(); };
 }
 function doPay(){
   const btn = $('#btnDoPay');
@@ -1937,6 +1938,51 @@ async function cloverReq(method, path, body){
   try{ return await r.json(); }catch(e){ return {}; }
 }
 const SHAWA_ORDER_API = 'https://shawa.work/api/public/order';
+const SHAWA_PAY_API = 'https://shawa.work/api/public/pay';
+function webItemsFromLines(lines){
+  const items = [];
+  lines.forEach(l=>{
+    const nm = (l.names && (l.names.en || Object.values(l.names)[0])) || 'Item';
+    let suffix = '';
+    (l.mods || []).forEach(m=>{
+      if(m.t === 'size' && m.v === 1) suffix += ' (Large)';
+      else if(m.t === 'spice' && m.v > 0) suffix += ' \u00b7 spice ' + m.v;
+      else if(m.t === 'extra'){ const ex = WRAP_EXTRAS.find(w=>w.id===m.v); if(ex) suffix += ' + ' + ex.name.en; }
+      else if(m.t === 'no'){ const rm = WRAP_REMOVE.find(w=>w.id===m.v); if(rm) suffix += ' \u00b7 ' + rm.name.en; }
+    });
+    items.push({ name: (nm + suffix).slice(0, 120), priceCents: Math.round((l.unit || 0) * 100), qty: Math.max(1, Math.min(10, l.qty || 1)) });
+  });
+  return items;
+}
+async function doPayOnline(btn){
+  const {tab} = getTab(false); if(!tab) return;
+  const items = webItemsFromLines(tab.items);
+  if(!items.length) return;
+  const orig = btn.innerHTML;
+  btn.disabled = true; btn.innerHTML = '<span class="spin"></span>' + T('processing');
+  try{
+    const r = await fetch(SHAWA_PAY_API, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ table: Math.round(Number(tableId)), items }) });
+    const j = await r.json().catch(()=>({}));
+    if(r.ok && j.ok && j.href){ try{ sessionStorage.setItem('shawa_pay_session', j.sessionId); }catch(e){} location.href = j.href; return; }
+    throw new Error('HTTP ' + r.status);
+  }catch(e){
+    btn.disabled = false; btn.innerHTML = orig;
+    toast(T('clvErr') + 'Online payment unavailable \u2014 pay at the restaurant');
+  }
+}
+async function handlePayReturn(){
+  const paid = params.get('paid'), fail = params.get('payfail');
+  if(!paid && !fail) return;
+  history.replaceState(null, '', location.pathname + '?table=' + encodeURIComponent(tableId || ''));
+  if(fail){ toast(T('clvErr') + 'Payment not completed'); return; }
+  try{ await fetch(SHAWA_PAY_API + '/confirm', { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ sessionId: paid }) }); }catch(e){}
+  const s = loadStore(); const tab = s.tables[tableId];
+  if(tab && !tab.paid){
+    const t = tabTotals(tab);
+    tab.paid = true; tab.paidAt = Date.now(); tab.tip = 0; tab.gift = 0; tab.grand = t.total; tab.payMethod = 'card'; tab.paidOnline = true;
+    saveStore(s); renderThanks(t, tab);
+  }
+}
 async function backendPushOrder(lines, batchNo){
   const table = Math.round(Number(tableId));
   if(!(table >= 1 && table <= 15)) return false;
@@ -2126,6 +2172,7 @@ document.querySelector('.tableno').onclick = ()=>{ if(!staffMode) showStart('mai
 
 applyStaticTexts(); updateRoleBtn(); seedDemo(); seedDemo2();
 renderCats(); renderMenu(); bootStart(); updateBadge(); renderCallBtn();
+handlePayReturn();
 
 setInterval(()=>{
   const ae = document.activeElement;
