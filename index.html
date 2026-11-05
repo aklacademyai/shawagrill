@@ -782,11 +782,12 @@ function renderCats(){
   document.querySelectorAll('#cats .cat').forEach(b=>b.onclick=()=>{ activeCat=+b.dataset.cat; renderCats(); renderMenu(); });
 }
 function itemById(id){ for(const c of effMenu()) for(const it of c.items) if(it.id===id) return it; return null; }
+let LIVE_MENU = null;
 function effMenu(){
   const s = loadStore();
   const hidden = new Set(s.hiddenItems||[]);
   const ov = s.nameOverrides||{};
-  const cats = MENU.map(c=>({cat:c.cat, items:c.items.filter(it=>!hidden.has(it.id)).map(it=>ov[it.id]?{...it, name:{...it.name, ...ov[it.id]}}:it)}));
+  const cats = (LIVE_MENU || MENU).map(c=>({cat:c.cat, items:c.items.filter(it=>!hidden.has(it.id)).map(it=>ov[it.id]?{...it, name:{...it.name, ...ov[it.id]}}:it)}));
   (s.customItems||[]).forEach(ci=>{ if(cats[ci.cat]) cats[ci.cat].items.push(ci); });
   return cats;
 }
@@ -1939,6 +1940,22 @@ async function cloverReq(method, path, body){
 }
 const SHAWA_ORDER_API = 'https://shawa.work/api/public/order';
 const SHAWA_PAY_API = 'https://shawa.work/api/public/pay';
+const SHAWA_MENU_API = 'https://shawa.work/api/public/menu';
+async function loadCloverMenu(){
+  try{
+    const r = await fetch(SHAWA_MENU_API);
+    const j = await r.json().catch(()=>({}));
+    if(!r.ok || !j.ok || !Array.isArray(j.categories) || !j.categories.length) return;
+    const photoByName = {}, descByName = {};
+    MENU.forEach(c=>c.items.forEach(it=>{ const k = (it.name.en || '').trim().toLowerCase(); if(k){ if(it.img && !photoByName[k]) photoByName[k] = it.img; if(it.desc && !descByName[k]) descByName[k] = it.desc; } }));
+    LIVE_MENU = j.categories.map(c=>({ cat: { en: c.name, ru: c.name, es: c.name }, items: c.items.map(ci=>{
+      const k = ci.name.trim().toLowerCase();
+      return { id: 'cv-' + ci.id, img: photoByName[k] || '', price: ci.priceCents / 100, tag: '', wrap: !!ci.wrap, name: { en: ci.name, ru: ci.name, es: ci.name }, desc: descByName[k] || { en: '', ru: '', es: '' } };
+    }) }));
+    activeCat = 0;
+    renderCats(); if(guestView === 'menu') renderMenu();
+  }catch(e){}
+}
 function webItemsFromLines(lines){
   const items = [];
   lines.forEach(l=>{
@@ -2173,6 +2190,7 @@ document.querySelector('.tableno').onclick = ()=>{ if(!staffMode) showStart('mai
 applyStaticTexts(); updateRoleBtn(); seedDemo(); seedDemo2();
 renderCats(); renderMenu(); bootStart(); updateBadge(); renderCallBtn();
 handlePayReturn();
+loadCloverMenu();
 
 setInterval(()=>{
   const ae = document.activeElement;
